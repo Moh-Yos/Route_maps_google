@@ -1,0 +1,39 @@
+.click{
+    background-color: green;
+    color:white;
+    display: block;
+    width: 50%;
+    margin: 20px auto;
+    border-radius:20px;
+}
+.clear{
+    background-color: red;
+}
+.Duration-distance{
+    width: 50%;
+    margin: 20px auto;
+    color:white;
+}
+.click-auto{
+    background-color: blue;
+}
+
+.input{
+    width: 50%;
+    margin: 20px auto;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: brown;
+}
+.input input{
+    border: 2px solid black;
+    width: 80%;
+    display: block;
+    margin:20px auto;
+    border-radius: 20px;
+}
+.mt-5{
+    
+    width: 200px;
+    margin:50px auto ;
+}

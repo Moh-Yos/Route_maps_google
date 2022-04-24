@@ -1,0 +1,207 @@
+import React, { useState,useEffect,useRef } from 'react'
+
+import { GoogleMap, LoadScript ,Marker , DirectionsRenderer,Autocomplete,  useJsApiLoader,} from '@react-google-maps/api';
+import TableItems from './Components/TableItems';
+
+const containerStyle = {
+  width: '100%',
+  height: '800px'
+};
+
+const onLoad = marker => {
+  console.log('marker: ', marker)
+}
+
+
+
+
+const App = () => {
+
+
+
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries: ['places'],
+  })
+
+  
+  const [directions,setDirections]= useState(null);
+
+  const [latitude,setLatitude] = useState('');
+  const [longitude , setLongitude] = useState('');
+
+
+  const [directionsResponse , setDirectionsResponse] = useState(null);
+  // const [duration,setDuretion] = useState('');
+  // const [distance,setDistance] = useState('');
+
+
+
+  const originRef = useRef();
+  const destinationRef = useRef()
+
+
+  const center = {
+    lat: latitude,
+    lng:longitude
+  };
+  const position = {
+    lat: latitude,
+    lng:longitude
+  }
+  
+  const position2 = {
+    lat: latitude,
+    lng:longitude-1
+  }
+
+// useEffect(()=>{
+//   navigator.geolocation.getCurrentPosition((position)=>{
+//     console.log("position",position);
+//     setLatitude(position.coords.latitude);
+//     setLongitude(position.coords.longitude);    
+//   })
+// },[])
+
+if (!isLoaded) {
+  return <div>map is not loaded</div>
+}
+
+
+//routes my location
+  // const routes = async()=>{
+  //   alert('are you sure');
+  // const directionsService = new window.google.maps.DirectionsService()
+  // const results = await directionsService.route({
+  //   origin: new window.google.maps.LatLng(    latitude, longitude),
+  //   destination:new window.google.maps.LatLng( latitude, (longitude-2)),
+  //   travelMode: window.google.maps.TravelMode.DRIVING,
+  // })
+  // setDirections(results);
+  // setDistance(results.routes[0].legs[0].distance.text)
+  // setDuretion(results.routes[0].legs[0].duration.value)
+  // }
+
+
+
+// route between tow points 
+//  async function calculateRoute (){
+//     if(originRef.current.value ==='' || destinationRef.current.value ===''){
+//       return
+//     }
+//     alert("are you sure");
+//     const directionsService2=new window.google.maps.DirectionsService()
+//     const results = await directionsService2.route({
+//       origin:originRef.current.value,
+//       destination: destinationRef.current.value,
+//       travelMode: window.google.maps.TravelMode.DRIVING
+//     })
+//     setDirectionsResponse(results);
+//     setDistance(results.routes[0].legs[0].distance.text)
+//     setDuretion(results.routes[0].legs[0].duration.value)
+//   }
+
+//   function clearRoute (){
+//     setDirectionsResponse(null);
+//     setDirections(null);
+//     setDistance('');
+//     setDuretion('');
+//     originRef.current.value='';
+//     destinationRef.current.value='';
+//   }
+
+  return (
+    <div>
+   
+
+      {/* <LoadScript
+        googleMapsApiKey="AIzaSyBugtLJBqKfRUKbRVCiCBXNGvSE6yU8T6k"
+      > */}
+
+
+    {/* <div className='input'>
+    <button className='click' onClick={routes}>Route my loacation</button>
+    <button className='click clear ' onClick={clearRoute}>Clear</button>
+    <button className='click click-auto' onClick={calculateRoute}>Click auto-complete</button>
+
+    <Autocomplete >
+    <input type='text' placeholder='Origin' ref={originRef}></input>
+    </Autocomplete>
+
+    <Autocomplete >
+    <input type='text' placeholder='destination' ref={destinationRef}></input>
+    </Autocomplete>
+
+<div className='Duration-distance'>
+    <h2>Distance: {distance}</h2>
+    <h2>Duration: {duration} minutes</h2>
+</div>
+</div> */}
+
+
+<TableItems  
+ destinationRef={destinationRef}
+ originRef={originRef}
+ setDirectionsResponse={setDirectionsResponse}
+ setDirections={setDirections}
+ latitude={latitude}
+ setLatitude={setLatitude}
+ longitude={longitude}
+ setLongitude={setLongitude}
+/>
+
+
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+        >
+          { /* Child components, such as markers, info windows, etc. */ }
+          <></>
+
+    
+
+          <Marker
+      onLoad={onLoad}
+      position={position}
+    />
+
+     <Marker
+      onLoad={onLoad}
+      position={position2}
+    />
+
+{directions && (
+              <DirectionsRenderer directions={directions} 
+               options={{
+                 polylineOptions:{
+                   zIndex:50,
+                   strokeColor:"black",
+                   strokeWeight:5
+                 }
+               }}
+  
+              />
+            )}
+
+  {directionsResponse && <DirectionsRenderer directions={directionsResponse}
+
+        options={{
+                 polylineOptions:{
+                   zIndex:50,
+                   strokeColor:"black",
+                   strokeWeight:5
+                 }
+               }}
+
+
+  />}
+
+        </GoogleMap>
+      {/* </LoadScript> */}
+    </div>
+  )
+}
+
+export default App
